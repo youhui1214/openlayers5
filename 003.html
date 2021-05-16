@@ -20,7 +20,7 @@
     
     <script>
 
-        let projection = ol.proj.get('EPSG:3857');
+        let projection = ol.proj.get('EPSG:4326');
         let projectionExtent = projection.getExtent()
         let size = ol.extent.getWidth(projectionExtent)/256
         let resolutions = new Array(19)
@@ -30,20 +30,15 @@
             resolutions[i] = size/Math.pow(2,i)
             matrixIds[i] = i
         }
-        
-       /*
-        let attribution = new ol.control.Attribution({
-            html: 'Tiles&copy;<a href="http://t4.tianditu.gov.cn/vec_c/wmts?">天地图</a>'
-        })*/
 
-        let wmtsLayer = new ol.source.Tile({
+        let wmtsLayer = new ol.layer.Tile({
             opacity: 1,
             source: new ol.source.WMTS({
                 // attributions: [attribution],
                 url: 'http://t4.tianditu.gov.cn/cva_c/wmts?LAYER=cva&tk=c96ca8004d96f017b3e76b4906b8e5e4',
                 matrixSet: 'c',
                 format: 'tiles',
-                // projection: projection,
+                projection: projection,
                 tileGrid: new ol.tilegrid.WMTS({
                     origin: ol.extent.getTopLeft(projectionExtent),
                     resolutions: resolutions,
@@ -64,7 +59,7 @@
                         url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=c96ca8004d96f017b3e76b4906b8e5e4",
                         wrapX: false
                     })
-                }),
+                })
             ],
             // 地图视图位置
             view: new ol.View({
@@ -74,7 +69,7 @@
         })
 
 
-        // map.addLayer(wmtsLayer);
+        map.addLayer(wmtsLayer);
     
     
     </script>

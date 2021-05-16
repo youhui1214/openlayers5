@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>004</title>
+    <link rel="stylesheet" href="js/v5.3.0-dist/ol.css">
+    <script src="js/v5.3.0-dist/ol.js"></script>
+    <style>
+        #mapCon {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="mapCon"></div>
+    
+    <script>
+        //WMTS图层数据
+        let wmtsLayer;
+        //通过范围计算得到分辨率数组
+        let projection = ol.proj.get('EPSG:4326');
+        let projectionExtent = projection.getExtent();
+        let size = ol.extent.getWidth(projectionExtent) / 256;
+        let resolutions = new Array(19);
+        let matrixIds = new Array(19);
+        for (let z = 0; z < 19; ++z) {
+            //生成WMTS分辨率和matrixIds数组
+            resolutions[z] = size / Math.pow(2, z);
+            matrixIds[z] = z;
+        }
+        //实例化WMTS服务图层对象（ol.layer.Tile，ol.source.WMTS）
+        wmtsLayer = new ol.layer.Tile({
+            opacity: 1, //图层透明度
+            source: new ol.source.WMTS({
+                // 数据源信息
+                attributions: 'Tiles &copy; <a href="http://t0.tianditu.cn/cva_c/wmts?LAYER=cva">天地图矢量注记</a>',
+                //WMTS服务基地址
+                url: 'http://t0.tianditu.gov.cn/cva_c/wmts?LAYER=cva&tk=c96ca8004d96f017b3e76b4906b8e5e4',
+                //投影坐标系设置矩阵
+                matrixSet: 'c',
+                //图片格式
+                format: 'tiles',
+                //数据的投影坐标系
+                projection: projection,
+                //瓦片网格对象
+                tileGrid: new ol.tilegrid.WMTS({
+                    //原点（左上角）
+                    origin: ol.extent.getTopLeft(projectionExtent),
+                    //分辨率数组
+                    resolutions: resolutions,
+                    //矩阵标识列表，与地图级数保持一致
+                    matrixIds: matrixIds
+                }),
+                style: 'default',
+                wrapX: true
+            })
+        });
+    
+    
+        //实例化Map对象加载地图,默认底图加载天地图
+        let map = new ol.Map({
+            layers: [
+                new ol.layer.Tile({
+                    title: "天地图矢量图层",
+                    source: new ol.source.XYZ({
+                        url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=c96ca8004d96f017b3e76b4906b8e5e4",
+                        wrapX: false
+                    })
+                })
+            ],
+            target: 'mapCon',//地图容器div的ID
+            view: new ol.View({
+                center: [0, 0],
+                minZoom: 2,
+                projection: "EPSG:4326",
+                zoom: 3
+            })
+        });
+
+
+        map.addLayer(wmtsLayer);
+       
+    
+    </script>
+
+</body>
+</html>
