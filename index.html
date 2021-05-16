@@ -22,16 +22,16 @@
         
         var map = new ol.Map({
             target: 'map',
-            loadTilesWhileInteracting: true,
+            // loadTilesWhileInteracting: true,
             // 在地图容器中加载图层
             layers: [
                 new ol.layer.Tile({
                     title: '天地图矢量图层',
                     source: new ol.source.XYZ({
-                        // url: 'http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&z={z}&tk=c96ca8004d96f017b3e76b4906b8e5e4',
-                        url: 'http://t4.tianditu.gov.cn/vec_c/wmts?tk=c96ca8004d96f017b3e76b4906b8e5e4',
-                        crossOrigin: 'anonymous',
-                        // wrapX: false
+                        url: 'http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=c96ca8004d96f017b3e76b4906b8e5e4',
+                        // url: 'http://t4.tianditu.gov.cn/vec_c/wmts?tk=c96ca8004d96f017b3e76b4906b8e5e4',
+                        // crossOrigin: 'anonymous',
+                        wrapX: false
                     })
                 }),
                 /*new ol.layer.Tile({

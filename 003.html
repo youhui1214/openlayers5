@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>003</title>
+    <link rel="stylesheet" href="js/v5.3.0-dist/ol.css">
+    <script src="js/v5.3.0-dist/ol.js"></script>
+    <style>
+        #map {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="map"></div>
+    
+    <script>
+
+        let projection = ol.proj.get('EPSG:3857');
+        let projectionExtent = projection.getExtent()
+        let size = ol.extent.getWidth(projectionExtent)/256
+        let resolutions = new Array(19)
+        let matrixIds = new Array(19)
+
+        for (let i = 0; i < 19; ++i) {
+            resolutions[i] = size/Math.pow(2,i)
+            matrixIds[i] = i
+        }
+        
+       /*
+        let attribution = new ol.control.Attribution({
+            html: 'Tiles&copy;<a href="http://t4.tianditu.gov.cn/vec_c/wmts?">天地图</a>'
+        })*/
+
+        let wmtsLayer = new ol.source.Tile({
+            opacity: 1,
+            source: new ol.source.WMTS({
+                // attributions: [attribution],
+                url: 'http://t4.tianditu.gov.cn/cva_c/wmts?LAYER=cva&tk=c96ca8004d96f017b3e76b4906b8e5e4',
+                matrixSet: 'c',
+                format: 'tiles',
+                // projection: projection,
+                tileGrid: new ol.tilegrid.WMTS({
+                    origin: ol.extent.getTopLeft(projectionExtent),
+                    resolutions: resolutions,
+                    matrixIds: matrixIds
+                }),
+                style: 'default',
+                wrapX: true
+            })
+        })
+        
+        let map = new ol.Map({
+            target: 'map',
+            // 在地图容器中加载图层
+            layers: [
+                new ol.layer.Tile({
+                    title: "天地图矢量图层",
+                    source: new ol.source.XYZ({
+                        url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=c96ca8004d96f017b3e76b4906b8e5e4",
+                        wrapX: false
+                    })
+                }),
+            ],
+            // 地图视图位置
+            view: new ol.View({
+                center: [0,0],
+                zoom: 3
+            })
+        })
+
+
+        // map.addLayer(wmtsLayer);
+    
+    
+    </script>
+
+</body>
+</html>
