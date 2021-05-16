@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>001</title>
+    <link rel="stylesheet" href="js/v5.3.0-dist/ol.css">
+    <script src="js/v5.3.0-dist/ol.js"></script>
+    <style>
+        #map {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="map"></div>
+    
+    <script>
+
+        let center = [108.946994, 34.261361];
+
+        let projection = ol.proj.get('EPSG:3857');
+        
+        let resolutions = [];
+        for (let i = 0; i < 19; i++) {
+            resolutions[i] = Math.pow(2, 18 - i);
+        }
+        let tilegrid = new ol.tilegrid.TileGrid({
+            origin: [0, 0],
+            resolutions: resolutions,
+        });
+
+        let baidu_source = new ol.source.TileImage({
+            projection: projection,
+            tileGrid: tilegrid,
+            tileUrlFunction: function (tileCoord, pixelRatio, proj) {
+                if (!tileCoord) {
+                    return "";
+                }
+                let z = tileCoord[0];
+                let x = tileCoord[1];
+                let y = tileCoord[2];
+        
+                if (x < 0) {
+                    x = "M" + -x;
+                }
+                if (y < 0) {
+                    y = "M" + -y;
+                }
+        
+                return (
+                    "https://api.map.baidu.com/customimage/tile?&x=" +
+                    x +
+                    "&y=" +
+                    y +
+                    "&z=" +
+                    z +
+                    "&udt=20210506&scale=1&ak=8d6c8b8f3749aed6b1aff3aad6f40e37&styles=t%3Aland%7Ce%3Ag%7Cc%3A%23e7f7fc%2Ct%3Awater%7Ce%3Aall%7Cc%3A%2396b5d6%2Ct%3Agreen%7Ce%3Aall%7Cc%3A%23b0d3dd%2Ct%3Ahighway%7Ce%3Ag.f%7Cc%3A%23a6cfcf%2Ct%3Ahighway%7Ce%3Ag.s%7Cc%3A%237dabb3%2Ct%3Aarterial%7Ce%3Ag.f%7Cc%3A%23e7f7fc%2Ct%3Aarterial%7Ce%3Ag.s%7Cc%3A%23b0d5d4%2Ct%3Alocal%7Ce%3Al.t.f%7Cc%3A%237a959a%2Ct%3Alocal%7Ce%3Al.t.s%7Cc%3A%23d6e4e5%2Ct%3Aarterial%7Ce%3Al.t.f%7Cc%3A%23374a46%2Ct%3Ahighway%7Ce%3Al.t.f%7Cc%3A%23374a46%2Ct%3Ahighway%7Ce%3Al.t.s%7Cc%3A%23e9eeed"
+                );
+            },
+        });
+
+        let baidu_layer = new ol.layer.Tile({
+            source: baidu_source,
+        });
+
+        /*let iconFeature = new ol.source.Feature({
+            geometry: new ol.source.Point(center),
+            name: "Null Island",
+            population: 4000,
+            rainfall: 500,
+        });
+
+        let iconStyle = new ol.source.Style({
+            image: new ol.source.Icon({
+                scale: 1,
+                // anchorXUnits: 'fraction',
+                // anchorYUnits: 'pixels',
+                src: ("../assets/police.png"),
+            }),
+        });
+
+        iconFeature.setStyle(iconStyle);
+
+        let vectorSource = new ol.VectorSource({
+            features: [iconFeature],
+        });
+
+        let vectorLayer = new ol.source.VectorLayer({
+            source: vectorSource,
+        });
+*/
+        let map = new ol.Map({
+            target: "map",
+            layers: [baidu_layer],
+            view: new ol.View({
+                center: center,
+                // center: [0,0],
+                zoom: 11,
+                projection: "EPSG:4326",
+            }),
+        });
+      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </script>
+
+</body>
+</html>
