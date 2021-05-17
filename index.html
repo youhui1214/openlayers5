@@ -20,35 +20,39 @@
 
     <script>
         
+        let hefei = [117.2548, 31.9604]
+        
         var map = new ol.Map({
             target: 'map',
-            // loadTilesWhileInteracting: true,
+            loadTilesWhileInteracting: true,
             // 在地图容器中加载图层
             layers: [
                 new ol.layer.Tile({
                     title: '天地图矢量图层',
                     source: new ol.source.XYZ({
                         url: 'http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=c96ca8004d96f017b3e76b4906b8e5e4',
-                        // url: 'http://t4.tianditu.gov.cn/vec_c/wmts?tk=c96ca8004d96f017b3e76b4906b8e5e4',
-                        // crossOrigin: 'anonymous',
+                        crossOrigin: 'anonymous',
                         wrapX: false
                     })
                 }),
-                /*new ol.layer.Tile({
+                new ol.layer.Tile({
                     title: '天地图矢量注记图层',
                     source: new ol.source.XYZ({
-                        // url: 'http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&z={z}&tk=c96ca8004d96f017b3e76b4906b8e5e4',
-                        url: 'http://t0.tianditu.gov.cn/cva_c/wmts?tk =c96ca8004d96f017b3e76b4906b8e5e4',
+                        url: 'http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=c96ca8004d96f017b3e76b4906b8e5e4',
                         attributions: '天地图的属性描述',
                         crossOrigin: 'anonymous',
                         wrapX: false
                     })
-                })*/
+                })
             ],
             // 地图视图位置
             view: new ol.View({
-                center: [0,0],
-                zoom: 3
+                // center: [50,30],
+                center: [117.2548, 31.9604],
+                zoom: 11,
+                projection: "EPSG:4326",
+                // minZoom: 10,
+                // maxZoom: 18,
             })
             
         
